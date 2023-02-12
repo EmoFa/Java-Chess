@@ -8,6 +8,8 @@ import java.util.*;
 public class Piece {
     int xp;
     int yp;
+    int x;
+    int y;
     boolean isWhite;
     LinkedList<Piece> ps;
     String name;
@@ -16,6 +18,8 @@ public class Piece {
     public Piece(int xp, int yp, boolean isWhite, String n, LinkedList<Piece> ps) {
         this.xp = xp;
         this.yp = yp;
+        x = xp * 64;
+        y = yp * 64;
         this.isWhite = isWhite;
         this.ps = ps;
         name = n;
@@ -24,13 +28,19 @@ public class Piece {
     
     // Function for moving a piece, if placed on a square with a piece it kills the piece
     public void move(int xp, int yp) {
-        if (this.xp != xp || this.yp != yp) {
-            ps.stream().filter(p -> (p.xp == xp && p.yp == yp)).forEachOrdered(p -> {
-                p.kill();
-            });
+        if(ChessGame.getPiece(xp * 64, yp * 64) != null) {
+            if(ChessGame.getPiece(xp * 64, yp * 64).isWhite != isWhite) {
+                ChessGame.getPiece(xp * 64, yp * 64).kill();
+            } else {
+                x = this.xp * 64;
+                y = this.yp * 64;
+                return;
+            }
         }
         this.xp = xp;
         this.yp = yp;
+        x = xp * 64;
+        y = yp * 64;
     }
     
     // Kill a piece
